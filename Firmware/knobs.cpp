@@ -141,7 +141,7 @@ void transmitCAN() {
   //   engineTemperatureMessage.data[2] = engineTemperature;
   //   carloop.can().transmit(engineTemperatureMessage);
   //   printReceivedMessage(engineTemperatureMessage);
-  // });
+  });
 
   every(10, [] {
     CANMessage message;
