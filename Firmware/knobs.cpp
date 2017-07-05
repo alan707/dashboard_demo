@@ -118,30 +118,30 @@ CANMessage engineSpeedMessage;
 CANMessage vehicleSpeedMessage;
 CANMessage engineTemperatureMessage;
 void transmitCAN() {
-  every(2, [] {
-    engineSpeedMessage.id = 0x0C9;
+  every(10, [] {
+    engineSpeedMessage.id = 0x355;
     engineSpeedMessage.len = 8;
-    engineSpeedMessage.data[1] = knobPercent[0] / 256; // 128 = 8000 rpm
+    engineSpeedMessage.data[2] = knobPercent[0] / 256; // 128 = 8000 rpm
     carloop.can().transmit(engineSpeedMessage);
     printReceivedMessage(engineSpeedMessage);
 
-    vehicleSpeedMessage.id = 0x3E9;
+    vehicleSpeedMessage.id = 0x356;
     vehicleSpeedMessage.len = 8;
     uint16_t vehicleSpeed = knobPercent[1] / 2;
-    vehicleSpeedMessage.data[0] = (uint8_t) (vehicleSpeed >> 8);
-    vehicleSpeedMessage.data[1] = (uint8_t) (vehicleSpeed & 0xFF);
+    vehicleSpeedMessage.data[2] = (uint8_t) (vehicleSpeed >> 8);
+    vehicleSpeedMessage.data[4] = (uint8_t) (vehicleSpeed & 0xFF);
     carloop.can().transmit(vehicleSpeedMessage);
     printReceivedMessage(vehicleSpeedMessage);
 
-    engineTemperatureMessage.id = 0x4C1;
-    engineTemperatureMessage.len = 8;
-    const uint8_t tmin = 0x57;
-    const uint8_t tmax = 0xAA;
-    uint8_t engineTemperature = (uint8_t)((uint32_t)knobPercent[2] * (tmax - tmin) / knob100Percent + tmin);
-    engineTemperatureMessage.data[2] = engineTemperature;
-    carloop.can().transmit(engineTemperatureMessage);
-    printReceivedMessage(engineTemperatureMessage);
-  });
+  //   engineTemperatureMessage.id = 0x4C1;
+  //   engineTemperatureMessage.len = 8;
+  //   const uint8_t tmin = 0x57;
+  //   const uint8_t tmax = 0xAA;
+  //   uint8_t engineTemperature = (uint8_t)((uint32_t)knobPercent[2] * (tmax - tmin) / knob100Percent + tmin);
+  //   engineTemperatureMessage.data[2] = engineTemperature;
+  //   carloop.can().transmit(engineTemperatureMessage);
+  //   printReceivedMessage(engineTemperatureMessage);
+  // });
 
   every(10, [] {
     CANMessage message;
